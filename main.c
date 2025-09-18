@@ -47,7 +47,7 @@
 #define SCALE 1000000LL // Fixed-point scale factor (S = 10^6)
 
 uint16_t image_Dimensions[5] = {128,160,192,224,256};
-
+uint32_t max_iterators[5] = {100,250,500,750,1000};//Task 2
 uint32_t start_time = 0;
 uint32_t end_time = 0;
 uint32_t execution_time = 0;
@@ -301,4 +301,5 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
 
