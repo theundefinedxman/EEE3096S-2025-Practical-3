@@ -46,7 +46,7 @@
 // - Performance timing variables (e.g execution time, throughput, pixels per second, clock cycles)
 #define SCALE 1000000LL // Fixed-point scale factor (S = 10^6)
 
-uint8_t image_Dimensions[5] = {128,160,192,224,256};
+uint16_t image_Dimensions[5] = {128,160,192,224,256};
 
 uint32_t start_time = 0;
 uint32_t end_time = 0;
@@ -64,6 +64,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 //TODO: Define any function prototypes you might need such as the calculate Mandelbrot function among others
+//Task 1
 uint64_t calculate_mandelbrot_fixed_point_arithmetic(int width, int height, int max_iterations);
 uint64_t calculate_mandelbrot_double(int width, int height, int max_iterations);
 
@@ -113,7 +114,8 @@ int main(void)
  	  //TODO: Benchmark and Profile Performance
  	     start_time = HAL_GetTick(); //Record the start time
  	     //128,160,192,224,256
- 	     checksum  = calculate_mandelbrot_double(256,256,1000);
+ 	     checksum  = calculate_mandelbrot_fixed_point_arithmetic(256,256,1000);
+       checksum  = calculate_mandelbrot_double(256,256,1000);
  	     end_time = HAL_GetTick();
  	     execution_time = end_time - start_time;
 
@@ -299,3 +301,4 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
