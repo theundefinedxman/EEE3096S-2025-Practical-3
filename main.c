@@ -26,7 +26,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#define MAX_ITER 100
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -44,18 +44,6 @@
 /* USER CODE BEGIN PV */
 //TODO: Define variables you think you might need
 // - Performance timing variables (e.g execution time, throughput, pixels per second, clock cycles)
-#define SCALE 1000000LL // Fixed-point scale factor (S = 10^6)
-
-uint16_t image_Dimensions[5] = {128,160,192,224,256};
-uint32_t max_iterators[5] = {100,250,500,750,1000};//Task 2
-uint32_t start_time = 0;
-uint32_t end_time = 0;
-uint32_t execution_time = 0;
-uint64_t checksum = 0;
-
-int width  = 0;
-int height = 0;
-int maxIter = 0;
 
 /* USER CODE END PV */
 
@@ -64,15 +52,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 //TODO: Define any function prototypes you might need such as the calculate Mandelbrot function among others
-//Task 1
-uint64_t calculate_mandelbrot_fixed_point_arithmetic(int width, int height, int max_iterations);
-uint64_t calculate_mandelbrot_double(int width, int height, int max_iterations);
 
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
+/* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
@@ -109,24 +90,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  //TODO: Visual indicator: Turn on LED0 to signal processing start
- 	     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET); // Turn on LED0 by setting pin.
- 	  //TODO: Benchmark and Profile Performance
- 	     start_time = HAL_GetTick(); //Record the start time
- 	     //128,160,192,224,256
- 	     checksum  = calculate_mandelbrot_fixed_point_arithmetic(256,256,1000);
-       checksum  = calculate_mandelbrot_double(256,256,1000);
- 	     end_time = HAL_GetTick();
- 	     execution_time = end_time - start_time;
-
- 	  //TODO: Visual indicator: Turn on LED1 to signal processing start
- 	     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET); // Turn on LED1 by setting pin.
-
- 	  //TODO: Keep the LEDs ON for 2s
- 	     HAL_Delay(2000);
-
- 	  //TODO: Turn OFF LEDs
- 	     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1, GPIO_PIN_RESET); // Turning OFF LED's.
 
   /* USER CODE END 2 */
 
@@ -135,7 +98,22 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+
     /* USER CODE BEGIN 3 */
+	  //TODO: Visual indicator: Turn on LED0 to signal processing start
+
+
+	  //TODO: Benchmark and Profile Performance
+
+
+	  //TODO: Visual indicator: Turn on LED1 to signal processing start
+
+
+	  //TODO: Keep the LEDs ON for 2s
+
+	  // TODO: Turn OFF LEDs
+
+
 
   }
   /* USER CODE END 3 */
@@ -150,23 +128,16 @@ void SystemClock_Config(void)
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Configure the main internal regulator output voltage
-  */
-  __HAL_RCC_PWR_CLK_ENABLE();
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
-
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = 15;
-  RCC_OscInitStruct.PLL.PLLN = 144;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
-  RCC_OscInitStruct.PLL.PLLR = 2;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL12;
+  RCC_OscInitStruct.PLL.PREDIV = RCC_PREDIV_DIV1;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -175,13 +146,12 @@ void SystemClock_Config(void)
   /** Initializes the CPU, AHB and APB buses clocks
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+                              |RCC_CLOCKTYPE_PCLK1;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -200,9 +170,9 @@ static void MX_GPIO_Init(void)
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
@@ -224,50 +194,6 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 //TODO: Function signatures you defined previously , implement them here
-uint64_t calculate_mandelbrot_fixed_point_arithmetic(int width, int height, int max_iterations){
-  uint64_t mandelbrot_sum = 0;
-    //TODO: Complete the function implementation
-    for(int y = 0 ; y < height; y++){
-    	for(int x = 0 ; x < width ; x++ ){
-    		int64_t x0 = (((int64_t)((x * 3500000LL) / width)) - 2500000LL);
-    		int64_t y0 = (((int64_t)((y * 2000000LL) / height)) - 1000000LL);
-    		int64_t xi = 0; int64_t yi = 0;
-    		int iteration = 0;
-    		while((iteration <  max_iterations) && ((((xi * xi)/ SCALE) + ((yi * yi)/ SCALE)) <= 4000000LL)){
-    			int temp  = ((xi * xi)/ SCALE) - ((yi * yi)/ SCALE);
-    			yi = ((2LL*(xi * yi)/ SCALE) + y0);
-    			xi = temp + x0;
-
-    			iteration++;
-    		}
-    		mandelbrot_sum += iteration;
-    	}
-    }
-    return mandelbrot_sum;
-
-}
-
-uint64_t calculate_mandelbrot_double(int width, int height, int max_iterations){
-    uint64_t mandelbrot_sum = 0;
-    //TODO: Complete the function implementation
-    for(int y = 0 ; y < height ; y++){
-    	for(int x = 0 ; x < width ; x++ ){
-    		double x0 = ((double)x / (double)width) * 3.5 - 2.5;
-    		double y0 = ((double)y / (double)height) * 2.0 - 1.0;
-
-    		double xi = 0.0; double yi = 0.0;
-    		double iteration =  0;
-    		while((iteration < max_iterations) && (((xi * xi) + (yi * yi)) <= 4.0)){
-    			double temp = ((xi * xi) - (yi * yi));
-    			yi  = (2.0 * (xi * yi) + y0);
-    			xi = (temp + x0);
-    			iteration++;
-    		}
-    		mandelbrot_sum += iteration;
-    	}
-    }
-    return mandelbrot_sum;
-}
 
 /* USER CODE END 4 */
 
@@ -301,5 +227,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-
