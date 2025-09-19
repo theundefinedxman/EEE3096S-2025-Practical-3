@@ -112,6 +112,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  for(int i=0;i<5;i++){
+		  //task 8
 		  //TODO: Visual indicator: Turn on LED0 to signal processing start
 		  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET); // Turn on LED0 by setting pin.
 
@@ -302,4 +303,5 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
 
