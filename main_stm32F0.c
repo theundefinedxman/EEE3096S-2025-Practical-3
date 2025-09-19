@@ -54,12 +54,15 @@ static void MX_GPIO_Init(void);
 //TODO: Define any function prototypes you might need such as the calculate Mandelbrot function among others
 uint32_t start_time = 0;//utilized in benchmarking
 uint32_t end_time = 0;//utilized in benchmarking
-uint32_t execution_time = 0;//measure of how long ittook for the program to finish executing
+//task 3
+uint32_t execution_time = 0;//measure of how long ittook for the program to finish executing 
 uint64_t checksum = 0; //the total number of coordinates that fall into the mandelbrot set
 
-int width  = 0;
-int height = 0;
-int maxIter = {100,200,500,750,1000};
+uint16_t image_Dimensions[5] = {128,160,192,224,256};//task 1
+int width[11]  = {320,416,512,640,704,832,960,1024,1152,1216,1920};//task4
+int height[11] = {320,416,512,640,704,832,960,1024,1080,1080,1080};//task4
+int maxIter = {100,200,500,750,1000};//task 2
+
 
 /* USER CODE END PFP */
 
@@ -299,3 +302,4 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+
