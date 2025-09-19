@@ -24,7 +24,7 @@ DEBUG = 1
 
 # TODO:Compiler Optimisation levels
 # optimization
-OPT = -O0 // this was the first compiler optimisztion we tested
+OPT = -O2 // this was the first compiler optimisztion we tested
 
 
 #######################################
@@ -204,3 +204,4 @@ clean:
 
 
 # *** EOF ***
+
